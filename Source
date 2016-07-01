@@ -1,0 +1,156 @@
+// *********************************
+// Chancellor Griffin
+// June 30 2016
+// Game of Life
+// *********************************
+
+
+
+#include <iostream>
+
+using namespace std;
+
+#include <memory.h> 
+#include <stdlib.h> 
+#include <array>
+
+int main() {
+	const int NumCols(60);
+	const int NumRows(60);
+	char ans;
+	bool CurrGen[NumRows + 2][NumCols + 2];
+	bool NextGen[NumRows + 2][NumCols + 2];
+	bool more = true;
+	int Col;
+	int Row;
+	int x;
+	int y;
+	int Generation;
+	int NumNeighbors;
+
+	memset(CurrGen, false, (NumRows + 2)* (NumCols + 2) * sizeof(bool));
+	memset(NextGen, false, (NumRows + 2) * (NumCols + 2) * sizeof(bool)); // 
+
+
+	cout << "Welcome to Chancellors Game of life!\nThis is a simple game based on Conways Game of Life" << endl;
+	cout << "In this game, you will place cells onto a board, where you place them is important for their survival!" << endl;
+	cout << "Rules:\nA Cell Dies if he gets lonely, and only has 1 or no neighbor cells!\nIf the cell is overcrowded and has 4 neighbors, it dies :(" << endl;
+	cout << "If three cells surround an empty space, a new cell is made in there!" << endl;
+	cout << "\n\nThe board is 60x60 (ENTER -1 -1 TO STOP PLACING CELLS) " << endl;
+
+
+	x = 0;
+	y = 0;
+
+		for (int i = 0; x != -1 & y != -1; i++)
+		{
+			cout << "Enter: X Y for Cell: " << i + 1 << " (Coords can be 1 - 60): ";
+			cin >> x;
+			cin >> y;
+			CurrGen[x][y] = 1;
+		}
+
+	// for (generation = 0; ; Generation ++)
+	Generation = 0;
+
+
+	do
+	{
+		cout << "Generation: " << Generation << endl << endl;
+		//Display CurGen Array here
+
+		for (Row = 1; Row <= NumRows; Row++) // Display Board
+		{
+			for (Col = 0; Col < NumCols; Col++)
+			{
+				cout << (CurrGen[Row][Col] ? '1' : ' ');
+			}
+			cout << endl;
+		}
+		/*Below is the scan all rows + columns to count each cells neighbors*/
+		for (Row = 1; Row <= NumRows; Row++)
+		{
+			for (Col = 1; Col <= NumCols; Col++)
+			{
+				NumNeighbors = 0;
+				if (CurrGen[Row - 1][Col - 1])
+					NumNeighbors++;
+				if (CurrGen[Row - 1][Col - 0])
+					NumNeighbors++;
+				if (CurrGen[Row - 1][Col + 1])
+					NumNeighbors++;
+				if (CurrGen[Row - 0][Col + 1])
+					NumNeighbors++;
+				if (CurrGen[Row + 1][Col + 1])
+					NumNeighbors++;
+				if (CurrGen[Row + 1][Col + 0])
+					NumNeighbors++;
+				if (CurrGen[Row + 1][Col - 1])
+					NumNeighbors++;
+				if (CurrGen[Row + 0][Col - 1])
+					NumNeighbors++;
+
+				switch (NumNeighbors)
+				{
+				case 0:
+					NextGen[Row][Col] = 0;
+				case 1:
+					NextGen[Row][Col] = 0;
+					break; // Death of cells
+				case 2:
+					NextGen[Row][Col] = CurrGen[Row][Col];
+					break; // Cell keeps on keepin on
+				case 3:
+					NextGen[Row][Col] = 1;
+					break; // Becomes ALIIIVE
+				case 4:
+					NextGen[Row][Col] = 0;
+				case 5:
+					NextGen[Row][Col] = 0;
+				case 6:
+					NextGen[Row][Col] = 0;
+				case 7:
+					NextGen[Row][Col] = 0;
+				case 8:
+					NextGen[Row][Col] = 0;
+					break; // Kills cell
+				default:
+					cout << "Internal error, please contact customer support" << endl;
+				}
+			}
+		}
+
+		for (Row = 1; Row <= NumRows; Row++)
+		{
+			for (Col = 1; Col <= NumCols; Col++)
+			{
+				CurrGen[Row][Col] = NextGen[Row][Col];
+			}
+		}
+
+
+
+		Generation++;
+
+		do
+		{
+			cout << "Would you like to continue? y/n: ";
+			cin >> ans;
+
+			if (ans == 'y')
+				more = true;
+			if (ans == 'n')
+				more = false;
+		} while (ans != 'y' && ans != 'n');
+
+
+
+
+	} while (more); // Main loop
+
+	cout << "Thanks for playing! Keep trying untill you take over the whole board!" << endl;
+
+	cout << "\nCreated By: Chancellor Griffin" << endl;
+
+	return 0;
+}
